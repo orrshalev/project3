@@ -22,6 +22,11 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>org.ejml</groupId>
+      <artifactId>ejml-all</artifactId>
+      <version>0.38</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -32,6 +37,12 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.ejml</groupId>
+      <artifactId>simple</artifactId>
+      <version>0.30</version>
     </dependency>
   </dependencies>
   <build>

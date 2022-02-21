@@ -13,6 +13,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.SimpleAttributeSet;
+
+import org.ejml.simple.SimpleMatrix;
 
 public class Transform2D extends JComponent {
 	static final int WINDOW_X = 500; // # of pixels horizontally
@@ -222,10 +225,17 @@ public class Transform2D extends JComponent {
 		JPanel buttonsPanel = new JPanel();
 		JButton everyButton = new JButton("Every Line Type");
 		JButton clearButton = new JButton("Clear");
+
 		comp.addLine(100, 100, 100, 150);
 		comp.addLine(100, 150, 150, 150);
 		comp.addLine(150, 150, 150, 100);
 		comp.addLine(100, 100, 150, 100);
+		SimpleMatrix mat = new SimpleMatrix(new double[][] {
+			new double[] {1d,5d},
+			new double[] {2d,3d}
+		});
+		System.out.println(mat.toString());
+
 		buttonsPanel.add(everyButton);
 		buttonsPanel.add(clearButton);
 		testFrame.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
