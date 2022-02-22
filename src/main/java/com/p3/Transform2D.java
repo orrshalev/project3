@@ -215,8 +215,8 @@ public class Transform2D extends JComponent {
 		comp.addLine(150, 150, 150, 100);
 		comp.addLine(100, 100, 150, 100);
 		SimpleMatrix mat = new SimpleMatrix(new double[][] {
-			new double[] {1d,5d},
-			new double[] {2d,3d}
+				new double[] { 1d, 5d },
+				new double[] { 2d, 3d }
 		});
 		System.out.println(mat.toString());
 
