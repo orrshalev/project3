@@ -4,9 +4,9 @@ import java.awt.Color;
 
 public class Line {
 
-    int x0;
+    final int x0;
     final int y0;
-    int x1;
+    final int x1;
     final int y1;
     final Color color;
 
