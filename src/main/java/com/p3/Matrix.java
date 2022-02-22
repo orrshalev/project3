@@ -6,6 +6,7 @@ public class Matrix {
     // not implemented
     public static LinkedList<Line> applyTransformation(double[][] matrix, LinkedList<Line> lines) {
         return new LinkedList<Line>();
+        
     }
 
     public static double[][] matrixMultiplication(double[][] A, double[][] B) {
