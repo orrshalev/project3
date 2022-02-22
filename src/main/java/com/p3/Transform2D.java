@@ -21,22 +21,6 @@ public class Transform2D extends JComponent {
 	static final int WINDOW_X = 500; // # of pixels horizontally
 	static final int WINDOW_Y = 500; // # of pixels vertically
 
-	private static class Line {
-		final int x0;
-		final int y0;
-		final int x1;
-		final int y1;
-		final Color color;
-
-		public Line(int x0, int y0, int x1, int y1, Color color) {
-			this.x0 = x0;
-			this.y0 = y0;
-			this.x1 = x1;
-			this.y1 = y1;
-			this.color = color;
-		}
-	}
-
 	private final LinkedList<Line> lines = new LinkedList<Line>(); // all lines
 
 	public void addLine(int x0, int x1, int x2, int x3) {

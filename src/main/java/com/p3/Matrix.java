@@ -1,6 +1,13 @@
 package com.p3;
-public class Matrix {
 
+import java.util.LinkedList;
+
+public class Matrix {
+    // not implemented
+    public static LinkedList<Line> applyTransformation(double[][] matrix, LinkedList<Line> lines)
+    {
+        return new LinkedList<Line>();
+    }
     public static double[][] matrixMultiplication(double[][] A, double[][] B)
     {
         double[][] C = new double[A.length][B[0].length];
@@ -55,6 +62,18 @@ public class Matrix {
             new double[] {x,y,1}
         };
         return mat;
+    }
+    // not implemented
+    public static double[][] scale(double Sx, double Sy, double Cx, double Cy)
+    {
+        return new double[5][];
+    }
+    // not implemented
+    // in degrees
+    public static double[][] rotate(double angle, double Cx, double Cy)
+    {
+        angle = Math.toRadians(angle);
+        return new double[5][];
     }
     public static void main(String[] args) 
     {
