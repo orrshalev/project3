@@ -16,6 +16,13 @@
             "request": "launch",
             "mainClass": "com.p3.Transform2D",
             "projectName": "project3"
+        },
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "com.p3.Matrix",
+            "projectName": "project3"
         }
     ]
 }
