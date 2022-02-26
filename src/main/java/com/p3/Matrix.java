@@ -11,7 +11,7 @@ public class Matrix {
             int x0 = line.x0;
             int y0 = line.y0;
             int x1 = line.x1;
-            int y1 = line.x1;
+            int y1 = line.y1;
             Color color = line.color;
             double[][] x0y0 = matrixMultiplication(coordinateMatrix(x0, y0), matrix);
             double[][] x1y1 = matrixMultiplication(coordinateMatrix(x1, y1), matrix);
@@ -21,7 +21,7 @@ public class Matrix {
             y1 = (int)x1y1[0][1];
             newlines.add(new Line(x0,y0,x1,y1,color));
         });
-        return lines;
+        return newlines;
     }
 
     public static double[][] matrixMultiplication(double[][] A, double[][] B) {

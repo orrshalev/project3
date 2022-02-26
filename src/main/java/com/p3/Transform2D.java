@@ -36,6 +36,19 @@ public class Transform2D extends JComponent {
 		lines.clear();
 		repaint();
 	}
+	
+	public void setLines(LinkedList<Line> newLines) {
+		lines.clear();
+		for (Line newLine : newLines)
+		{
+			lines.add(newLine);
+		}
+		repaint();
+	}
+
+	public LinkedList<Line> getLines() {
+		return lines;
+	}
 
 	/**
 	 * Implementation of bresenham line generation algorithm given two
@@ -207,6 +220,7 @@ public class Transform2D extends JComponent {
 		comp.setPreferredSize(new Dimension(WINDOW_X, WINDOW_Y));
 		testFrame.getContentPane().add(comp, BorderLayout.CENTER);
 		JPanel buttonsPanel = new JPanel();
+		JButton translateButton = new JButton("Translate");
 		JButton everyButton = new JButton("Every Line Type");
 		JButton clearButton = new JButton("Clear");
 
@@ -220,9 +234,20 @@ public class Transform2D extends JComponent {
 		});
 		System.out.println(mat.toString());
 
+		buttonsPanel.add(translateButton);
 		buttonsPanel.add(everyButton);
 		buttonsPanel.add(clearButton);
+
+		double[][] tMatrix = Matrix.basicTranslate(100, 100);
+
 		testFrame.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+		translateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+			}
+		});
 		everyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
