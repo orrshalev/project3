@@ -6,29 +6,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
             "name": "Launch App",
             "request": "launch",
             "mainClass": "com.p3.Transform2D",
-            "projectName": "project3"
-        },
-        {
-            "type": "java",
-            "name": "Matrix",
-            "request": "launch",
-            "mainClass": "com.p3.Matrix",
-            "projectName": "project3"
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "com.p3.Test",
             "projectName": "project3"
         }
     ]

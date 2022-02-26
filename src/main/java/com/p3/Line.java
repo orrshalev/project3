@@ -20,9 +20,6 @@ public class Line {
 
     @Override
     public String toString(){
-        String line = "Line:\n";
-        line += "x0: " + x0 + "\t" + "y0: " + y0 + "\n";
-        line += "x1: " + x1 + "\t" + "y1: " + y1 + "\n";
-        return line;
+        return x0 + " " + y0 + " " + x1 + " " + y1;
     }
 }

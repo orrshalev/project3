@@ -6,20 +6,34 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.text.SimpleAttributeSet;
+import javax.swing.JTextArea;
+import javax.swing.JFileChooser;
 
-import org.ejml.simple.SimpleMatrix;
-
+/**
+ * Graphical app that can do simple geometric line manipulations
+ */
 public class Transform2D extends JComponent {
 	static final int WINDOW_X = 500; // # of pixels horizontally
 	static final int WINDOW_Y = 500; // # of pixels vertically
+
+	// text area vars
+	static private JTextArea textArea = new JTextArea(15, 30);
+	static private TextAreaOutputStream taOutputStream = new TextAreaOutputStream(textArea);
+
+	// file chooser var
+	static final JFileChooser fc = new JFileChooser();
 
 	private final LinkedList<Line> lines = new LinkedList<Line>(); // all lines
 
@@ -36,11 +50,10 @@ public class Transform2D extends JComponent {
 		lines.clear();
 		repaint();
 	}
-	
+
 	public void setLines(LinkedList<Line> newLines) {
 		lines.clear();
-		for (Line newLine : newLines)
-		{
+		for (Line newLine : newLines) {
 			lines.add(newLine);
 		}
 		repaint();
@@ -51,7 +64,7 @@ public class Transform2D extends JComponent {
 	}
 
 	/**
-	 * Implementation of bresenham line generation algorithm given two
+	 * Implementation of simple line generation algorithm given two
 	 * points and a graphics object. This method fills pixels based on the
 	 * drawRect(x, y, width, height) function of the graphics object
 	 * which draws a single pixel at (x,y) when width = 0 and height = 0.
@@ -195,7 +208,7 @@ public class Transform2D extends JComponent {
 	}
 
 	/**
-	 * Drawing lines based on Bresenham algorithm
+	 * Drawing lines based on simple line algorithm
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -208,69 +221,121 @@ public class Transform2D extends JComponent {
 
 	/**
 	 * Screen logic
-	 * Added text box for user to input N, button to draw lines,
-	 * button to draw every type of line for showcasing purpose,
-	 * and button to clear lines. Lines are generated randomly
-	 * using Math package.
 	 */
 	public static void main(String[] args) {
-		JFrame testFrame = new JFrame("Bresenham's Algorithm");
+		// screen
+		JFrame testFrame = new JFrame("2D Transformations");
 		testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		final Transform2D comp = new Transform2D();
 		comp.setPreferredSize(new Dimension(WINDOW_X, WINDOW_Y));
 		testFrame.getContentPane().add(comp, BorderLayout.CENTER);
+
+		// text
+		testFrame.getContentPane().add(textArea, BorderLayout.EAST);
+		System.setOut(new PrintStream(taOutputStream));
+
+		// buttons
 		JPanel buttonsPanel = new JPanel();
-		JButton translateButton = new JButton("Translate");
-		JButton everyButton = new JButton("Every Line Type");
-		JButton clearButton = new JButton("Clear");
-
-		comp.addLine(100, 100, 100, 150);
-		comp.addLine(100, 150, 150, 150);
-		comp.addLine(150, 150, 150, 100);
-		comp.addLine(100, 100, 150, 100);
-		SimpleMatrix mat = new SimpleMatrix(new double[][] {
-				new double[] { 1d, 5d },
-				new double[] { 2d, 3d }
-		});
-		System.out.println(mat.toString());
-
-		buttonsPanel.add(translateButton);
-		buttonsPanel.add(everyButton);
-		buttonsPanel.add(clearButton);
-
-		double[][] tMatrix = Matrix.basicTranslate(100, 100);
-
+		JButton inputButton = new JButton("Input Lines");
+		JButton transformButton = new JButton("Transform");
+		JButton outputButton = new JButton("Output Lines");
+		buttonsPanel.add(inputButton);
+		buttonsPanel.add(transformButton);
+		buttonsPanel.add(outputButton);
 		testFrame.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
-		translateButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
-			}
-		});
-		everyButton.addActionListener(new ActionListener() {
+		// input file button logic
+		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				comp.clearLines();
-				comp.addLine(50, 50, 50, 50, Color.BLACK); // point
-				comp.addLine(75, 150, 75, 100, Color.BLACK); // vertical
-				comp.addLine(125, 100, 100, 100, Color.BLUE); // horizontal
-				comp.addLine(200, 200, 250, 230, Color.ORANGE); // positive slope, dx > dy
-				comp.addLine(250, 250, 300, 330, Color.MAGENTA); // positive slope, dy > dx
-				comp.addLine(400, 100, 350, 300, Color.PINK); // negative slope, dy > dx
-				comp.addLine(250, 100, 200, 130, Color.RED); // negative slope, dx > dy
-				comp.addLine(200, 400, 250, 450, Color.GREEN); // positive slope, dx = dy
-				comp.addLine(300, 400, 350, 350, Color.GRAY); // negative slope, dx = dy
+				comp.clearLines(); // clear lines for new lines
+				fc.showOpenDialog(testFrame);
+				File file = fc.getSelectedFile();
+				try {
+					Scanner myReader = new Scanner(file);
+					while (myReader.hasNextLine()) {
+						String lineText = myReader.nextLine();
+						String[] line = lineText.split(" ");
+						comp.addLine(Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2]),
+								Integer.parseInt(line[3]));
+					}
+					myReader.close();
+				} catch (FileNotFoundException notFound) {
+					System.out.println("File not found");
+				}
 			}
 		});
-		clearButton.addActionListener(new ActionListener() {
+		// Button to activate transformation logic
+		transformButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String inputCommand = textArea.getText();
+				String lastInput = inputCommand.substring(inputCommand.lastIndexOf("\n") + 1);
+				String[] command = lastInput.split(" ");
+				double[][] tMatrix;
+				// System.out.println("Last command found: " + lastCommand);
+				if (command[0].equals("help")) {
+					System.out.println("To be prompted to enter a line file, press the 'Input Lines' button.\n" +
+							"To transform visible lines, enter a valid command in the console and then press the 'Transform' button.\n" +
+							"Valid commands:\n" +
+							"BasicTranslate x y\n" +
+							"BasicScale x y\n" +
+							"BasicRotate angle\n" +
+							"Scale x y Cx Cy\n" +
+							"Rotate angle Cx Cy\n" +
+							"To write line coordinates to a file, type the path to the file you want to write to and\n" +
+							"press the 'Output Lines' button.");
+				} else if (command[0].equals("BasicTranslate")) {
+					tMatrix = Matrix.basicTranslate(Double.parseDouble(command[1]), Double.parseDouble(command[2]));
+					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+				} else if (command[0].equals("BasicScale")) {
+					tMatrix = Matrix.basicScale(Double.parseDouble(command[1]), Double.parseDouble(command[2]));
+					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+				} else if (command[0].equals("BasicRotate")) {
+					tMatrix = Matrix.basicRotate(Double.parseDouble(command[1]));
+					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+				} else if (command[0].equals("Scale")) {
+					tMatrix = Matrix.scale(Double.parseDouble(command[1]), Double.parseDouble(command[2]),
+							Integer.parseInt(command[3]), Integer.parseInt(command[4]));
+					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+				} else if (command[0].equals("Rotate")) {
+					tMatrix = Matrix.rotate(Double.parseDouble(command[1]), Double.parseDouble(command[2]),
+							Integer.parseInt(command[3]));
+					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
+				} else {
+					System.out.println("Could not parse command");
+				}
+
+			}
+		});
+		// Output lines to file button
+		outputButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				comp.clearLines();
+				String inputCommand = textArea.getText();
+				String filePath = inputCommand.substring(inputCommand.lastIndexOf("\n") + 1);
+				try {
+					File file = new File(filePath);
+					if (file.createNewFile()) {
+						FileWriter myWriter = new FileWriter(file);
+						for (Line line : comp.getLines()) {
+							myWriter.write(line.toString() + "\n");
+						}
+						myWriter.close();
+						System.out.println("Lines written to " + filePath);
+					} else {
+						System.out.println("File already exists");
+					}
+				} catch (IOException ioe) {
+					System.out.println("Error");
+				}
 			}
 		});
 		testFrame.pack();
 		testFrame.setVisible(true);
+
+		// instructions
+		System.out.println("### TYPE \'help\' AND PRESS 'Transform' FOR PROGRAM INSTRUCTIONS ###");
+		System.out.println("COMMANDS:");
 	}
 }
