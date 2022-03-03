@@ -277,14 +277,14 @@ public class Transform2D extends JComponent {
 					System.out.println("To be prompted to enter a line file, press the 'Input Lines' button.\n" +
 							"To transform visible lines, enter a valid command in the console and then press the 'Transform' button.\n" +
 							"Valid commands:\n" +
-							"BasicTranslate x y\n" +
+							"Translate x y\n" +
 							"BasicScale x y\n" +
 							"BasicRotate angle\n" +
 							"Scale x y Cx Cy\n" +
 							"Rotate angle Cx Cy\n" +
 							"To write line coordinates to a file, type the path to the file you want to write to and\n" +
 							"press the 'Output Lines' button.");
-				} else if (command[0].equals("BasicTranslate")) {
+				} else if (command[0].equals("Translate")) {
 					tMatrix = Matrix.basicTranslate(Double.parseDouble(command[1]), Double.parseDouble(command[2]));
 					comp.setLines(Matrix.applyTransformation(tMatrix, comp.getLines()));
 				} else if (command[0].equals("BasicScale")) {
